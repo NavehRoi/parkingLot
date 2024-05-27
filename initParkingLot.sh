@@ -12,12 +12,6 @@ cd parkingLot
 
 npm install
 
-MONGODB_URI=$(aws ssm get-parameter --name "MONGODB_URI" --with-decryption --query "Parameter.Value" --output text)
-
-cat <<EOF > .env
-MONGODB_URI=$MONGODB_URI
-EOF
-
 node server.js
 
 echo "Deployment completed successfully. Application is running on port 3000."
