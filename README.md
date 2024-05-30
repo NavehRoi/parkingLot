@@ -22,6 +22,21 @@ Two HTTP endpoints are implemented:
 - **Framework**: Node.js
 - **Deployment**: AWS (EC2 Instance)
 
+
 # CloudFormation Template
 A CloudFormation template (`cloudFormation.json`) is provided in the repository to create the stack.
+
+## Exposing Public URL
+After deploying the CloudFormation stack, follow these steps to find the public URL:
+
+1. Navigate to the AWS Management Console.
+2. Go to the CloudFormation service.
+3. Select the stack created by the CloudFormation template.
+4. In the stack details, navigate to the "Outputs" tab.
+5. Look for an output named something like "WebServerURL" or "PublicURL".
+6. Copy the provided URL.
+7. Paste the URL into a web browser.
+
+Now, you should be able to access the web server of the parking lot management system using the public URL. ENJOY!!!
+
 
