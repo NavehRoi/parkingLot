@@ -1,0 +1,72 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Creates an EC2 instance with port 3000 enabled and runs user data script",
+  "Resources": {
+    "MyEC2Instance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "t2.micro",
+        "ImageId": "ami-04fe22dfadec6f0b6",
+        "SecurityGroups": [
+          {
+            "Ref": "InstanceSecurityGroup"
+          }
+        ],
+        "UserData": {
+          "Fn::Base64": {
+            "Fn::Join": [
+              "",
+              [
+                "#!/bin/bash\n",
+                "sudo yum update -y\n",
+                "sudo yum install -y git\n",
+                "curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash -\n",
+                "sudo yum install -y nodejs\n",
+                "sudo npm install -g pm2\n",
+                "git clone https://github.com/NavehRoi/parkingLot.git\n",
+                "cd parkingLot\n",
+                "npm install\n",
+                "node server.js\n",
+                "echo \"Deployment completed successfully. Application is running on port 3000.\"\n"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "InstanceSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Enable port 3000 for Node.js app",
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 3000,
+            "ToPort": 3000,
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "PublicIPv4Address": {
+      "Description": "Public IPv4 address with port 3000 for connecting to the EC2 instance",
+      "Value": {
+        "Fn::Join": [
+          "",
+          [
+            "http://",
+            {
+              "Fn::GetAtt": [
+                "MyEC2Instance",
+                "PublicIp"
+              ]
+            },
+            ":3000"
+          ]
+        ]
+      }
+    }
+  }
+}
